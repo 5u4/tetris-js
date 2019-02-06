@@ -13,6 +13,10 @@ export class GraphicService {
         this.gl = gl;
     }
 
+    getGl() {
+        return this.gl;
+    }
+
     clearColor(color: Color) {
         const webglColor = colorToWebGLColor(color);
 
@@ -63,12 +67,37 @@ export class GraphicService {
             webglTo.x, webglTo.y, webglColor.R, webglColor.G, webglColor.B,
         ];
 
-        this.initBuffer(this.gl.ARRAY_BUFFER, lineVerticies, this.gl.STATIC_DRAW);
+        this.drawPrepare(lineVerticies);
+
+        this.gl.drawArrays(this.gl.LINES, 0, 2);
+    }
+
+    drawRectangleOutline(topLeft: Point, bottomRight: Point, color: Color) {
+        const vertices = this.calculateRectangleVertices(topLeft, bottomRight, color);
+
+        this.drawPrepare(vertices);
+
+        this.gl.drawArrays(this.gl.LINE_LOOP, 0, 4);
+    }
+
+    private calculateRectangleVertices(topLeft: Point, bottomRight: Point, color: Color) {
+        const webglTopLeft = pointToWebGLPoint(topLeft);
+        const webglBottomRight = pointToWebGLPoint(bottomRight);
+        const webglColor = colorToWebGLColor(color);
+
+        return [
+            webglTopLeft.x, webglTopLeft.y, webglColor.R, webglColor.G, webglColor.B,
+            webglTopLeft.x, webglBottomRight.y, webglColor.R, webglColor.G, webglColor.B,
+            webglBottomRight.x, webglBottomRight.y, webglColor.R, webglColor.G, webglColor.B,
+            webglBottomRight.x, webglTopLeft.y, webglColor.R, webglColor.G, webglColor.B,
+        ];
+    }
+
+    private drawPrepare(vertices: number[]) {
+        this.initBuffer(this.gl.ARRAY_BUFFER, vertices, this.gl.STATIC_DRAW);
 
         this.attribPointer("vertPosition", 2, 5, 0);
         this.attribPointer("vertColor", 3, 5, 2);
-
-        this.gl.drawArrays(this.gl.LINES, 0, 2);
     }
 
     private initBuffer(target: GLenum, data: number[], usage: GLenum) {

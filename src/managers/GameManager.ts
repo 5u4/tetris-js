@@ -1,4 +1,4 @@
-import { BACKGROUND_COLOR } from "../constants/colors";
+import { BACKGROUND_COLOR, WHITE } from "../constants/colors";
 import { GraphicService } from "../services/GraphicService";
 import { fshader } from "../shaders/fshader";
 import { vshader } from "../shaders/vshader";
@@ -23,9 +23,10 @@ export class GameManager {
         const instance = new GameManager();
 
         instance.initCanvas();
-        instance.boardManager = new BoardManager(instance.gl);
         instance.graphicService = new GraphicService(instance.gl);
+        instance.boardManager = new BoardManager(instance.graphicService);
         instance.initGame();
+        instance.boardManager.drawBoard();
 
         return instance;
     }
@@ -33,11 +34,13 @@ export class GameManager {
     /**
      * Main render loop trigger
      */
-    render() {
+    render(framerate = 1000) {
         const renderLoop = () => {
-            this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
-            this.renderer();
-            window.requestAnimationFrame(renderLoop);
+            setTimeout(() => {
+                window.requestAnimationFrame(renderLoop);
+                this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
+                this.renderer();
+            }, framerate);
         };
 
         renderLoop();
@@ -47,7 +50,7 @@ export class GameManager {
      * The main rendering logic
      */
     private renderer() {
-        //
+        this.boardManager.drawBoard();
     }
 
     /**
