@@ -13,6 +13,8 @@ export class GameManager {
 
     private static readonly WARNING_TEXT = "Your browser doesn't support the HTML5 canvas element";
     private static readonly FRAMERATE = 600;
+    private static readonly BTN_DISABLE_CLASS_NAME = "is-disabled";
+    private static readonly PLAYING_TEXT = "PLAYING";
 
     static readonly CANVAS_HEIGHT = 620;
     static readonly CANVAS_WIDTH = 320;
@@ -41,12 +43,12 @@ export class GameManager {
      * Main render loop trigger
      */
     render() {
-        this.cellManager.generateTile();
-
         const renderLoop = () => {
+            this.cellManager.generateTile();
+
             setTimeout(() => {
-                window.requestAnimationFrame(renderLoop);
                 this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
+                window.requestAnimationFrame(renderLoop);
                 this.cellManager.softDrop();
                 this.renderer();
             }, GameManager.FRAMERATE);
@@ -66,6 +68,14 @@ export class GameManager {
                 this.cellManager.moveRight();
                 this.rerender();
             }
+        });
+
+        const startButton = document.getElementById("start");
+
+        startButton.addEventListener("click", () => {
+            this.render();
+            startButton.classList.add(GameManager.BTN_DISABLE_CLASS_NAME);
+            startButton.textContent = GameManager.PLAYING_TEXT;
         });
     }
 

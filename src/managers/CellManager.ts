@@ -8,7 +8,7 @@ export class CellManager {
     private graphicService: GraphicService;
     private currentTile: Tile = undefined;
 
-    static readonly DEFAULT_ORIGIN: BoardPoint = { x: 4, y: 0 };
+    static readonly DEFAULT_ORIGIN: BoardPoint = { x: 4, y: -1 };
     static readonly CELL_DIMINSION = 30;
 
     constructor(graphicService: GraphicService) {
