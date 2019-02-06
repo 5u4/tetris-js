@@ -12,7 +12,7 @@ export class GameManager {
     private graphicService: GraphicService;
 
     private static readonly WARNING_TEXT = "Your browser doesn't support the HTML5 canvas element";
-    private static readonly FRAMERATE = 1000 / 30;
+    private static readonly FRAMERATE = 600;
 
     static readonly CANVAS_HEIGHT = 620;
     static readonly CANVAS_WIDTH = 320;
@@ -32,6 +32,8 @@ export class GameManager {
         instance.initGame();
         instance.boardManager.drawBoard();
 
+        instance.registerKeys();
+
         return instance;
     }
 
@@ -45,6 +47,7 @@ export class GameManager {
             setTimeout(() => {
                 window.requestAnimationFrame(renderLoop);
                 this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
+                this.cellManager.softDrop();
                 this.renderer();
             }, GameManager.FRAMERATE);
         };
@@ -52,11 +55,29 @@ export class GameManager {
         renderLoop();
     }
 
+    private registerKeys() {
+        const body = document.getElementsByTagName("body")[0];
+
+        body.addEventListener("keydown", (ev: KeyboardEvent) => {
+            if (ev.key === "ArrowLeft") {
+                this.cellManager.moveLeft();
+                this.rerender();
+            } else if (ev.key === "ArrowRight") {
+                this.cellManager.moveRight();
+                this.rerender();
+            }
+        });
+    }
+
+    private rerender() {
+        this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
+        this.renderer();
+    }
+
     /**
      * The main rendering logic
      */
     private renderer() {
-        this.cellManager.softDrop();
         this.cellManager.drawCurrentTile();
         this.boardManager.drawBoard();
     }

@@ -7,8 +7,6 @@ import { Tile } from "../types/Tile";
 export class CellManager {
     private graphicService: GraphicService;
     private currentTile: Tile = undefined;
-    private dropTime = 20;
-    private timeBetweenDrop = this.dropTime;
 
     static readonly DEFAULT_ORIGIN: BoardPoint = { x: 4, y: 0 };
     static readonly CELL_DIMINSION = 30;
@@ -32,12 +30,14 @@ export class CellManager {
     }
 
     softDrop() {
-        if (this.timeBetweenDrop > 0) {
-            this.timeBetweenDrop--;
-            return;
-        }
+        this.currentTile.moveToward("down");
+    }
 
-        this.currentTile.drop();
-        this.timeBetweenDrop = this.dropTime;
+    moveLeft() {
+        this.currentTile.moveToward("left");
+    }
+
+    moveRight() {
+        this.currentTile.moveToward("right");
     }
 }
