@@ -8,4 +8,8 @@ export class BoardManager {
         this.gl = gl;
         this.graphicService = new GraphicService(this.gl);
     }
+
+    drawBoard() {
+        //
+    }
 }

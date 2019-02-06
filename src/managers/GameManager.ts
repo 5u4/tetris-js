@@ -1,8 +1,13 @@
+import { BACKGROUND_COLOR } from "../constants/colors";
+import { GraphicService } from "../services/GraphicService";
+import { fshader } from "../shaders/fshader";
+import { vshader } from "../shaders/vshader";
 import { BoardManager } from "./BoardManager";
 
 export class GameManager {
     gl: WebGLRenderingContext;
     private boardManager: BoardManager;
+    private graphicService: GraphicService;
 
     private static readonly WARNING_TEXT = "Your browser doesn't support the HTML5 canvas element";
 
@@ -18,6 +23,8 @@ export class GameManager {
 
         instance.initCanvas(GameManager.CANVAS_DIMENSION);
         instance.boardManager = new BoardManager(instance.gl);
+        instance.graphicService = new GraphicService(instance.gl);
+        instance.initGame();
 
         return instance;
     }
@@ -39,6 +46,21 @@ export class GameManager {
      */
     private renderer() {
         //
+    }
+
+    /**
+     * Initialize the game
+     */
+    private initGame() {
+        this.graphicService.clearColor(BACKGROUND_COLOR);
+        this.graphicService.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+        this.graphicService.initProgram();
+
+        this.graphicService.createShader(this.gl.VERTEX_SHADER, vshader);
+        this.graphicService.createShader(this.gl.FRAGMENT_SHADER, fshader);
+
+        this.graphicService.useProgram();
     }
 
     /**
