@@ -80,6 +80,14 @@ export class GraphicService {
         this.gl.drawArrays(this.gl.LINE_LOOP, 0, 4);
     }
 
+    drawRectangle(topLeft: Point, bottomRight: Point, color: Color) {
+        const vertices = this.calculateRectangleVertices(topLeft, bottomRight, color);
+
+        this.drawPrepare(vertices);
+
+        this.gl.drawArrays(this.gl.TRIANGLE_FAN, 0, 4);
+    }
+
     private calculateRectangleVertices(topLeft: Point, bottomRight: Point, color: Color) {
         const webglTopLeft = pointToWebGLPoint(topLeft);
         const webglBottomRight = pointToWebGLPoint(bottomRight);

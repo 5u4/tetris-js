@@ -1,15 +1,18 @@
-import { BACKGROUND_COLOR, WHITE } from "../constants/colors";
+import { BACKGROUND_COLOR } from "../constants/colors";
 import { GraphicService } from "../services/GraphicService";
 import { fshader } from "../shaders/fshader";
 import { vshader } from "../shaders/vshader";
 import { BoardManager } from "./BoardManager";
+import { CellManager } from "./CellManager";
 
 export class GameManager {
     gl: WebGLRenderingContext;
     private boardManager: BoardManager;
+    private cellManager: CellManager;
     private graphicService: GraphicService;
 
     private static readonly WARNING_TEXT = "Your browser doesn't support the HTML5 canvas element";
+    private static readonly FRAMERATE = 1000 / 30;
 
     static readonly CANVAS_HEIGHT = 620;
     static readonly CANVAS_WIDTH = 320;
@@ -25,6 +28,7 @@ export class GameManager {
         instance.initCanvas();
         instance.graphicService = new GraphicService(instance.gl);
         instance.boardManager = new BoardManager(instance.graphicService);
+        instance.cellManager = new CellManager(instance.graphicService);
         instance.initGame();
         instance.boardManager.drawBoard();
 
@@ -34,13 +38,15 @@ export class GameManager {
     /**
      * Main render loop trigger
      */
-    render(framerate = 1000) {
+    render() {
+        this.cellManager.generateTile();
+
         const renderLoop = () => {
             setTimeout(() => {
                 window.requestAnimationFrame(renderLoop);
                 this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
                 this.renderer();
-            }, framerate);
+            }, GameManager.FRAMERATE);
         };
 
         renderLoop();
@@ -50,6 +56,8 @@ export class GameManager {
      * The main rendering logic
      */
     private renderer() {
+        this.cellManager.softDrop();
+        this.cellManager.drawCurrentTile();
         this.boardManager.drawBoard();
     }
 

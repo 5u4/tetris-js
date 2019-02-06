@@ -1,15 +1,15 @@
 import { WHITE } from "../constants/colors";
 import { GraphicService } from "../services/GraphicService";
+import { CellManager } from "./CellManager";
 
 export class BoardManager {
-    private gl: WebGLRenderingContext;
     private graphicService: GraphicService;
 
-    static readonly CELL_DIMINSION = 30;
+    static readonly BOARD_WIDTH_OFFSET = 10;
+    static readonly BOARD_HEIGHT_OFFSET = 10;
 
     constructor(graphicService: GraphicService) {
         this.graphicService = graphicService;
-        this.gl = graphicService.getGl();
     }
 
     drawBoard(color = WHITE) {
@@ -19,8 +19,8 @@ export class BoardManager {
         /* Draw horizontal */
         for (let i = 1; i < 20; i++) {
             this.graphicService.drawLine(
-                { x: 10, y: 10 + BoardManager.CELL_DIMINSION * i },
-                { x: 310, y: 10 + BoardManager.CELL_DIMINSION * i },
+                { x: 10, y: 10 + CellManager.CELL_DIMINSION * i },
+                { x: 310, y: 10 + CellManager.CELL_DIMINSION * i },
                 color
             );
         }
@@ -28,8 +28,8 @@ export class BoardManager {
         /* Draw vertical */
         for (let i = 1; i < 10; i++) {
             this.graphicService.drawLine(
-                { x: 10 + BoardManager.CELL_DIMINSION * i, y: 10 },
-                { x: 10 + BoardManager.CELL_DIMINSION * i, y: 610 },
+                { x: 10 + CellManager.CELL_DIMINSION * i, y: 10 },
+                { x: 10 + CellManager.CELL_DIMINSION * i, y: 610 },
                 color
             );
         }
