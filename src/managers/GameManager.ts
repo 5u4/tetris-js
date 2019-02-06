@@ -11,7 +11,8 @@ export class GameManager {
 
     private static readonly WARNING_TEXT = "Your browser doesn't support the HTML5 canvas element";
 
-    static readonly CANVAS_DIMENSION = 625;
+    static readonly CANVAS_HEIGHT = 620;
+    static readonly CANVAS_WIDTH = 320;
 
     private constructor() { }
 
@@ -21,7 +22,7 @@ export class GameManager {
     static init() {
         const instance = new GameManager();
 
-        instance.initCanvas(GameManager.CANVAS_DIMENSION);
+        instance.initCanvas();
         instance.boardManager = new BoardManager(instance.gl);
         instance.graphicService = new GraphicService(instance.gl);
         instance.initGame();
@@ -34,6 +35,7 @@ export class GameManager {
      */
     render() {
         const renderLoop = () => {
+            this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
             this.renderer();
             window.requestAnimationFrame(renderLoop);
         };
@@ -68,15 +70,15 @@ export class GameManager {
      *
      * @param dimension The dimension of the canvas
      */
-    private initCanvas(dimension: number) {
+    private initCanvas() {
         const canvas = document.createElement("canvas");
         const warningText = document.createTextNode(GameManager.WARNING_TEXT);
 
-        canvas.width = dimension;
-        canvas.height = dimension;
+        canvas.width = GameManager.CANVAS_WIDTH;
+        canvas.height = GameManager.CANVAS_HEIGHT;
 
         canvas.appendChild(warningText);
-        document.getElementsByTagName("body")[0].appendChild(canvas);
+        document.getElementById("gameframe").prepend(canvas);
 
         this.gl = canvas.getContext("webgl");
 

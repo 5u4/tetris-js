@@ -1,0 +1,23 @@
+html, body {
+    text-align: center;
+    height: 100vh;
+    user-select: none;
+}
+
+canvas {
+    display: block;
+    margin: 0;
+}
+
+.score {
+    display: block;
+    width: 313px;
+    margin-left: 22px;
+}
+
+#gameframe {
+    display: flex;
+    width: 670px;
+    height: 660px;
+    margin: 0 auto;
+}
