@@ -16,6 +16,11 @@ canvas {
     margin-left: 22px;
 }
 
+
+button {
+    margin: 40px 0 !important;
+}
+
 #gameframe {
     display: flex;
     width: 670px;
