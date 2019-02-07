@@ -4,8 +4,8 @@ import { BoardPoint } from "./Point";
 
 export interface Tile {
     readonly color: Color;
+    readonly movement: { [key in Direction]: () => void };
     getPosition(): BoardPoint;
-    moveToward(direction: Direction): void;
 }
 
 export type TILE = "DOT";

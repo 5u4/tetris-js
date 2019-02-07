@@ -6,15 +6,21 @@ import { BoardManager } from "./BoardManager";
 import { CellManager } from "./CellManager";
 
 export class GameManager {
-    gl: WebGLRenderingContext;
+    private gl: WebGLRenderingContext;
     private boardManager: BoardManager;
     private cellManager: CellManager;
     private graphicService: GraphicService;
+    private dropSpeed = GameManager.INITIAL_DROP_SPEED;
 
-    private static readonly WARNING_TEXT = "Your browser doesn't support the HTML5 canvas element";
-    private static readonly FRAMERATE = 600;
+    private static readonly INITIAL_DROP_SPEED = 600;
     private static readonly BTN_DISABLE_CLASS_NAME = "is-disabled";
     private static readonly PLAYING_TEXT = "PLAYING";
+
+    private readonly TILE_MOVEMENT = {
+        ArrowLeft: () => { this.cellManager.moveLeft(); },
+        ArrowRight: () => { this.cellManager.moveRight(); },
+        ArrowDown: () => { this.cellManager.softDrop(); },
+    };
 
     static readonly CANVAS_HEIGHT = 620;
     static readonly CANVAS_WIDTH = 320;
@@ -27,14 +33,14 @@ export class GameManager {
     static init() {
         const instance = new GameManager();
 
-        instance.initCanvas();
+        instance.initWebGL();
         instance.graphicService = new GraphicService(instance.gl);
         instance.boardManager = new BoardManager(instance.graphicService);
         instance.cellManager = new CellManager(instance.graphicService);
         instance.initGame();
         instance.boardManager.drawBoard();
 
-        instance.registerKeys();
+        instance.registrateKeys();
 
         return instance;
     }
@@ -51,34 +57,57 @@ export class GameManager {
                 window.requestAnimationFrame(renderLoop);
                 this.cellManager.softDrop();
                 this.renderer();
-            }, GameManager.FRAMERATE);
+            }, this.dropSpeed);
         };
 
         renderLoop();
     }
 
-    private registerKeys() {
-        const body = document.getElementsByTagName("body")[0];
-
-        body.addEventListener("keydown", (ev: KeyboardEvent) => {
-            if (ev.key === "ArrowLeft") {
-                this.cellManager.moveLeft();
-                this.rerender();
-            } else if (ev.key === "ArrowRight") {
-                this.cellManager.moveRight();
-                this.rerender();
-            }
-        });
+    /**
+     * Registrate action keys on html elements
+     */
+    private registrateKeys() {
+        document.getElementById("body")
+            .addEventListener("keydown", this.tileMovementHandler());
 
         const startButton = document.getElementById("start");
 
-        startButton.addEventListener("click", () => {
+        startButton.addEventListener("click", this.startHandler(startButton));
+    }
+
+    /**
+     * Handle tile movement
+     */
+    private tileMovementHandler() {
+        return (ev: KeyboardEvent) => {
+            const handle = this.TILE_MOVEMENT[ev.key];
+
+            if (handle === undefined) {
+                return;
+            }
+
+            handle();
+
+            this.rerender();
+        };
+    }
+
+    /**
+     * Start the rendering loop
+     *
+     * @param startButton The start button that is going to be disabled
+     */
+    private startHandler(startButton: HTMLElement) {
+        return () => {
             this.render();
             startButton.classList.add(GameManager.BTN_DISABLE_CLASS_NAME);
             startButton.textContent = GameManager.PLAYING_TEXT;
-        });
+        };
     }
 
+    /**
+     * Immediately render again
+     */
     private rerender() {
         this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
         this.renderer();
@@ -108,22 +137,9 @@ export class GameManager {
     }
 
     /**
-     * Create a canvas and extract webgl from it
-     *
-     * @param dimension The dimension of the canvas
+     * Extract webgl from canvas
      */
-    private initCanvas() {
-        const canvas = document.createElement("canvas");
-        const warningText = document.createTextNode(GameManager.WARNING_TEXT);
-
-        canvas.width = GameManager.CANVAS_WIDTH;
-        canvas.height = GameManager.CANVAS_HEIGHT;
-
-        canvas.appendChild(warningText);
-        document.getElementById("gameframe").prepend(canvas);
-
-        this.gl = canvas.getContext("webgl");
-
-        return canvas;
+    private initWebGL() {
+        this.gl = (<HTMLCanvasElement>document.getElementById("board")).getContext("webgl");
     }
 }

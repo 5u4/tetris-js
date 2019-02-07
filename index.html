@@ -11,9 +11,12 @@
     <title>Tetris</title>
 </head>
 
-<body class="nes-container">
+<body id="body" class="nes-container">
     <h1>Tetris</h1>
     <div id="gameframe" class="nes-container is-rounded">
+        <canvas id="board" width="320" height="620">
+            Your browser doesn't support the HTML5 canvas element
+        </canvas>
         <div class="score nes-container is-round is-centered">
             <button id="start" type="button" class="nes-btn">START</button>
         </div>

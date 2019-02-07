@@ -30,14 +30,14 @@ export class CellManager {
     }
 
     softDrop() {
-        this.currentTile.moveToward("down");
+        this.currentTile.movement.down();
     }
 
     moveLeft() {
-        this.currentTile.moveToward("left");
+        this.currentTile.movement.left();
     }
 
     moveRight() {
-        this.currentTile.moveToward("right");
+        this.currentTile.movement.right();
     }
 }
