@@ -1,6 +1,7 @@
 import { GraphicService } from "../services/GraphicService";
 import { TileService } from "../services/TileService";
 import { boardPointToRectPoints } from "../transformers/point";
+import { Direction } from "../types/Direction";
 import { BoardPoint } from "../types/Point";
 import { Tile } from "../types/Tile";
 
@@ -30,14 +31,34 @@ export class CellManager {
     }
 
     softDrop() {
+        if (this.canMoveToward("down") === false) {
+            return;
+        }
+
         this.currentTile.movement.down();
     }
 
     moveLeft() {
+        if (this.canMoveToward("left") === false) {
+            return;
+        }
+
         this.currentTile.movement.left();
     }
 
     moveRight() {
+        if (this.canMoveToward("right") === false) {
+            return;
+        }
+
         this.currentTile.movement.right();
+    }
+
+    canMoveToward(direction: Direction) {
+        if (this.currentTile === undefined) {
+            return false;
+        }
+
+        return true;
     }
 }

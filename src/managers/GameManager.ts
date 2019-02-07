@@ -13,8 +13,6 @@ export class GameManager {
     private dropSpeed = GameManager.INITIAL_DROP_SPEED;
 
     private static readonly INITIAL_DROP_SPEED = 600;
-    private static readonly BTN_DISABLE_CLASS_NAME = "is-disabled";
-    private static readonly PLAYING_TEXT = "PLAYING";
 
     private readonly TILE_MOVEMENT = {
         ArrowLeft: () => { this.cellManager.moveLeft(); },
@@ -41,6 +39,7 @@ export class GameManager {
         instance.boardManager.drawBoard();
 
         instance.registrateKeys();
+        instance.cellManager.generateTile(); // TODO: Remove
 
         return instance;
     }
@@ -49,18 +48,48 @@ export class GameManager {
      * Main render loop trigger
      */
     render() {
-        const renderLoop = () => {
-            this.cellManager.generateTile();
+        this.startRender();
+    }
 
+    /**
+     * Draw the frame
+     */
+    private draw() {
+        this.cellManager.drawCurrentTile();
+        this.boardManager.drawBoard();
+    }
+
+    /**
+     * Start rendering
+     */
+    private startRender() {
+        const frame = () => {
             setTimeout(() => {
-                this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
-                window.requestAnimationFrame(renderLoop);
-                this.cellManager.softDrop();
-                this.renderer();
+                this.renderProcess(frame);
             }, this.dropSpeed);
         };
 
-        renderLoop();
+        frame();
+    }
+
+    /**
+     * The rendering process
+     *
+     * @param frame The repeated function
+     */
+    private renderProcess(frame: () => void) {
+        this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
+        window.requestAnimationFrame(frame);
+        this.cellManager.softDrop();
+        this.draw();
+    }
+
+    /**
+     * Immediately render again
+     */
+    private redraw() {
+        this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
+        this.draw();
     }
 
     /**
@@ -69,10 +98,6 @@ export class GameManager {
     private registrateKeys() {
         document.getElementById("body")
             .addEventListener("keydown", this.tileMovementHandler());
-
-        const startButton = document.getElementById("start");
-
-        startButton.addEventListener("click", this.startHandler(startButton));
     }
 
     /**
@@ -88,37 +113,8 @@ export class GameManager {
 
             handle();
 
-            this.rerender();
+            this.redraw();
         };
-    }
-
-    /**
-     * Start the rendering loop
-     *
-     * @param startButton The start button that is going to be disabled
-     */
-    private startHandler(startButton: HTMLElement) {
-        return () => {
-            this.render();
-            startButton.classList.add(GameManager.BTN_DISABLE_CLASS_NAME);
-            startButton.textContent = GameManager.PLAYING_TEXT;
-        };
-    }
-
-    /**
-     * Immediately render again
-     */
-    private rerender() {
-        this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
-        this.renderer();
-    }
-
-    /**
-     * The main rendering logic
-     */
-    private renderer() {
-        this.cellManager.drawCurrentTile();
-        this.boardManager.drawBoard();
     }
 
     /**
