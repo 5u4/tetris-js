@@ -3,21 +3,15 @@ import { BoardPoint } from "../types/Point";
 import { Tile } from "../types/Tile";
 
 export class Dot implements Tile {
-    private position: BoardPoint;
-
-    readonly movement = {
-        down: () => { this.position.y++; },
-        left: () => { this.position.x--; },
-        right: () => { this.position.x++; },
-    };
+    private positions: BoardPoint[];
 
     readonly color = RED;
 
-    constructor(position: BoardPoint) {
-        this.position = position;
+    constructor(origin: BoardPoint) {
+        this.positions = [origin];
     }
 
-    getPosition() {
-        return this.position;
+    getPositions() {
+        return this.positions;
     }
 }

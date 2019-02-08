@@ -37,9 +37,11 @@ export class CellManager {
             return;
         }
 
-        const rectangle = boardPointToRectPoints(this.currentTile.getPosition());
+        this.currentTile.getPositions().forEach(position => {
+            const rectangle = boardPointToRectPoints(position);
 
-        this.graphicService.drawRectangle(rectangle.topLeft, rectangle.bottomRight, this.currentTile.color);
+            this.graphicService.drawRectangle(rectangle.topLeft, rectangle.bottomRight, this.currentTile.color);
+        });
     }
 
     drawStaticTiles() {
@@ -65,7 +67,7 @@ export class CellManager {
 
     softDrop() {
         if (this.canDrop() === true) {
-            this.currentTile.movement.down();
+            TileService.movement(this.currentTile).down();
             return;
         }
 
@@ -74,7 +76,7 @@ export class CellManager {
 
     fastDrop() {
         while (this.canDrop() === true) {
-            this.currentTile.movement.down();
+            TileService.movement(this.currentTile).down();
         }
 
         this.land();
@@ -85,7 +87,7 @@ export class CellManager {
             return;
         }
 
-        this.currentTile.movement.left();
+        TileService.movement(this.currentTile).left();
     }
 
     moveRight() {
@@ -93,7 +95,7 @@ export class CellManager {
             return;
         }
 
-        this.currentTile.movement.right();
+        TileService.movement(this.currentTile).right();
     }
 
     private canDrop() {
@@ -101,13 +103,15 @@ export class CellManager {
             return false;
         }
 
-        /* Check if reached bottom */
-        if (this.currentTile.getPosition().y >= CellManager.VERTICAL_CELL_NUMBER - 1) {
-            return false;
-        }
+        for (const position of this.currentTile.getPositions()) {
+            /* Check if reached bottom */
+            if (position.y >= CellManager.VERTICAL_CELL_NUMBER - 1) {
+                return false;
+            }
 
-        if (this.collisionService.canMoveToward(this.currentTile.getPosition(), DOWN) === false) {
-            return false;
+            if (this.collisionService.canMoveToward(position, DOWN) === false) {
+                return false;
+            }
         }
 
         return true;
@@ -118,13 +122,15 @@ export class CellManager {
             return false;
         }
 
-        /* Check if reach left border */
-        if (this.currentTile.getPosition().x <= 0) {
-            return false;
-        }
+        for (const position of this.currentTile.getPositions()) {
+            /* Check if reach left border */
+            if (position.x <= 0) {
+                return false;
+            }
 
-        if (this.collisionService.canMoveToward(this.currentTile.getPosition(), LEFT) === false) {
-            return false;
+            if (this.collisionService.canMoveToward(position, LEFT) === false) {
+                return false;
+            }
         }
 
         return true;
@@ -135,13 +141,15 @@ export class CellManager {
             return false;
         }
 
-        /* Check if reach right border */
-        if (this.currentTile.getPosition().x >= CellManager.HORIZONTAL_CELL_NUMBER - 1) {
-            return false;
-        }
+        for (const position of this.currentTile.getPositions()) {
+            /* Check if reach right border */
+            if (position.x >= CellManager.HORIZONTAL_CELL_NUMBER - 1) {
+                return false;
+            }
 
-        if (this.collisionService.canMoveToward(this.currentTile.getPosition(), RIGHT) === false) {
-            return false;
+            if (this.collisionService.canMoveToward(position, RIGHT) === false) {
+                return false;
+            }
         }
 
         return true;

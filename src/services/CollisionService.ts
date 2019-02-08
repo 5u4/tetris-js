@@ -32,9 +32,9 @@ export class CollisionService {
     }
 
     registrate(tile: Tile) {
-        const position = tile.getPosition();
-
-        this.collider[position.x][position.y] = tile.color;
+        tile.getPositions().forEach(position => {
+            this.collider[position.x][position.y] = tile.color;
+        });
     }
 
     clearRows() {
