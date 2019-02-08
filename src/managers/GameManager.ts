@@ -15,9 +15,10 @@ export class GameManager {
     private static readonly INITIAL_DROP_SPEED = 600;
 
     private readonly TILE_MOVEMENT = {
-        ArrowLeft: () => { this.cellManager.moveLeft(); },
-        ArrowRight: () => { this.cellManager.moveRight(); },
-        ArrowDown: () => { this.cellManager.softDrop(); },
+        "ArrowLeft": () => { this.cellManager.moveLeft(); },
+        "ArrowRight": () => { this.cellManager.moveRight(); },
+        "ArrowDown": () => { this.cellManager.softDrop(); },
+        " ": () => { this.cellManager.fastDrop(); },
     };
 
     static readonly CANVAS_HEIGHT = 620;

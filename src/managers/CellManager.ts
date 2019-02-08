@@ -58,6 +58,15 @@ export class CellManager {
         this.generateTile();
     }
 
+    fastDrop() {
+        while (this.canDrop() === true) {
+            this.currentTile.movement.down();
+        }
+
+        this.land();
+        this.generateTile();
+    }
+
     moveLeft() {
         if (this.canMoveLeft() === false) {
             return;
