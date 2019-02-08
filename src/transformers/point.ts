@@ -15,6 +15,17 @@ export const CELL_WIDTH_IN_WEBGL = 0.09375;
 
 export const CELL_HEIGHT_IN_WEBGL = 0.048387097;
 
+export const addPoints = (point: Point, ...addingPoints: Point[]) => {
+    const sum = { ...point };
+
+    addingPoints.forEach(p => {
+        sum.x += p.x;
+        sum.y += p.y;
+    });
+
+    return sum;
+};
+
 export const pointToWebGLPoint = (point: Point): WebGLPoint => {
     return {
         x: transformPixelToWebGLPosition(point.x, GameManager.CANVAS_WIDTH),

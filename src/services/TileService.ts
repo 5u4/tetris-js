@@ -1,9 +1,9 @@
-import { CellManager } from "../managers/CellManager";
 import { Dot } from "../tiles/Dot";
+import { BoardPoint } from "../types/Point";
 import { TILE } from "../types/Tile";
 
 export class TileService {
-    static instantiate(tile: TILE, position = CellManager.DEFAULT_ORIGIN) {
+    static instantiate(tile: TILE, position: BoardPoint = { x: 4, y: -1 }) {
         switch (tile) {
             case "DOT":
                 return new Dot(position);

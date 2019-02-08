@@ -16,8 +16,8 @@ export class BoardManager {
         this.graphicService.drawRectangleOutline({ x: 5, y: 5 }, { x: 315, y: 615 }, color);
         this.graphicService.drawRectangleOutline({ x: 10, y: 10 }, { x: 310, y: 610 }, color);
 
-        /* Draw horizontal */
-        for (let i = 1; i < 20; i++) {
+        /* Draw horizontal lines */
+        for (let i = 1; i < CellManager.VERTICAL_CELL_NUMBER; i++) {
             this.graphicService.drawLine(
                 { x: 10, y: 10 + CellManager.CELL_DIMINSION * i },
                 { x: 310, y: 10 + CellManager.CELL_DIMINSION * i },
@@ -25,8 +25,8 @@ export class BoardManager {
             );
         }
 
-        /* Draw vertical */
-        for (let i = 1; i < 10; i++) {
+        /* Draw vertical lines */
+        for (let i = 1; i < CellManager.HORIZONTAL_CELL_NUMBER; i++) {
             this.graphicService.drawLine(
                 { x: 10 + CellManager.CELL_DIMINSION * i, y: 10 },
                 { x: 10 + CellManager.CELL_DIMINSION * i, y: 610 },

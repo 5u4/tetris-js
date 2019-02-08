@@ -56,6 +56,7 @@ export class GameManager {
      */
     private draw() {
         this.cellManager.drawCurrentTile();
+        this.cellManager.drawStaticTiles();
         this.boardManager.drawBoard();
     }
 
