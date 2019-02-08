@@ -47,6 +47,10 @@ export class CellManager {
 
         collider.forEach((colors, i) => {
             colors.forEach((color, j) => {
+                if (color === undefined) {
+                    return;
+                }
+
                 const rectangle = boardPointToRectPoints({ x: i, y: j });
 
                 this.graphicService.drawRectangle(rectangle.topLeft, rectangle.bottomRight, color);
@@ -149,6 +153,7 @@ export class CellManager {
         }
 
         this.collisionService.registrate(this.currentTile);
+        this.collisionService.clearRows();
         this.currentTile = undefined;
     }
 }
