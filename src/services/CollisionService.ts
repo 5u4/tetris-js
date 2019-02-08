@@ -5,17 +5,26 @@ import { Tile } from "../types/Tile";
 
 export class CollisionService {
     private collider: Color[][];
+    private x: number;
+    private y: number;
 
     constructor(x: number, y: number) {
-        this.collider = new Array<Color[]>(x);
+        this.x = x;
+        this.y = y;
 
-        for (let i = 0; i < y; i++) {
-            this.collider[i] = new Array<Color>(y);
-        }
+        this.init();
     }
 
     getCollider() {
         return this.collider;
+    }
+
+    init() {
+        this.collider = new Array<Color[]>(this.x);
+
+        for (let i = 0; i < this.y; i++) {
+            this.collider[i] = new Array<Color>(this.y);
+        }
     }
 
     canMoveToward(from: Point, movement: Point) {

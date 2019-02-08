@@ -11,11 +11,14 @@ export class GameManager {
     private cellManager: CellManager;
     private graphicService: GraphicService;
     private dropSpeed = GameManager.INITIAL_DROP_SPEED;
+    private status: "pausing" | "playing" = "pausing";
 
     private static readonly INITIAL_DROP_SPEED = 600;
     private static readonly START_BUTTON_ID = "start";
     private static readonly BTN_DISABLE_CLASS_NAME = "is-disabled";
-    private static readonly PLAYING_TEXT = "playing";
+    private static readonly PLAYING_TEXT = "PLAYING";
+    private static readonly START_TEXT = "START";
+    private static readonly QUIT_KEY: string = "q";
 
     private readonly TILE_MOVEMENT = {
         "ArrowLeft": () => { this.cellManager.moveLeft(); },
@@ -82,6 +85,10 @@ export class GameManager {
      * @param frame The repeated function
      */
     private renderProcess(frame: () => void) {
+        if (this.status !== "playing") {
+            return;
+        }
+
         this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
         window.requestAnimationFrame(frame);
 
@@ -106,12 +113,12 @@ export class GameManager {
      * Registrate action keys on html elements
      */
     private registrateKeys() {
-        document.getElementById("body")
-            .addEventListener("keydown", this.tileMovementHandler());
+        document.getElementById("body").addEventListener("keydown", this.tileMovementHandler());
 
         const startButton = document.getElementById(GameManager.START_BUTTON_ID);
 
         startButton.addEventListener("click", this.startHandler(startButton));
+        startButton.addEventListener("keydown", this.quitHandler(startButton));
     }
 
     /**
@@ -131,16 +138,54 @@ export class GameManager {
         };
     }
 
+    /**
+     * Handle start action
+     *
+     * @param startButton
+     */
     private startHandler(startButton: HTMLElement) {
         return () => {
-            if (startButton.classList.contains(GameManager.BTN_DISABLE_CLASS_NAME)) {
+            if (this.status !== "pausing") {
                 return;
             }
 
             this.startRender();
             startButton.classList.add(GameManager.BTN_DISABLE_CLASS_NAME);
             startButton.textContent = GameManager.PLAYING_TEXT;
+
+            this.status = "playing";
         };
+    }
+
+    /**
+     * Handle quit action
+     *
+     * @param startButton
+     */
+    private quitHandler(startButton: HTMLElement) {
+        return (ev: KeyboardEvent) => {
+            if (this.status !== "playing") {
+                return;
+            }
+
+            if (ev.key !== GameManager.QUIT_KEY) {
+                return;
+            }
+
+            this.reset();
+            startButton.classList.remove(GameManager.BTN_DISABLE_CLASS_NAME);
+            startButton.textContent = GameManager.START_TEXT;
+
+            this.status = "pausing";
+        };
+    }
+
+    /**
+     * Reset the game
+     */
+    private reset() {
+        this.cellManager.clear();
+        this.redraw();
     }
 
     /**

@@ -54,6 +54,11 @@ export class CellManager {
         });
     }
 
+    clear() {
+        this.currentTile = undefined;
+        this.collisionService.init();
+    }
+
     softDrop() {
         if (this.canDrop() === true) {
             this.currentTile.movement.down();
