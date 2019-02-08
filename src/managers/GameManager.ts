@@ -13,6 +13,9 @@ export class GameManager {
     private dropSpeed = GameManager.INITIAL_DROP_SPEED;
 
     private static readonly INITIAL_DROP_SPEED = 600;
+    private static readonly START_BUTTON_ID = "start";
+    private static readonly BTN_DISABLE_CLASS_NAME = "is-disabled";
+    private static readonly PLAYING_TEXT = "playing";
 
     private readonly TILE_MOVEMENT = {
         "ArrowLeft": () => { this.cellManager.moveLeft(); },
@@ -105,6 +108,10 @@ export class GameManager {
     private registrateKeys() {
         document.getElementById("body")
             .addEventListener("keydown", this.tileMovementHandler());
+
+        const startButton = document.getElementById(GameManager.START_BUTTON_ID);
+
+        startButton.addEventListener("click", this.startHandler(startButton));
     }
 
     /**
@@ -121,6 +128,18 @@ export class GameManager {
             handle();
 
             this.redraw();
+        };
+    }
+
+    private startHandler(startButton: HTMLElement) {
+        return () => {
+            if (startButton.classList.contains(GameManager.BTN_DISABLE_CLASS_NAME)) {
+                return;
+            }
+
+            this.startRender();
+            startButton.classList.add(GameManager.BTN_DISABLE_CLASS_NAME);
+            startButton.textContent = GameManager.PLAYING_TEXT;
         };
     }
 
