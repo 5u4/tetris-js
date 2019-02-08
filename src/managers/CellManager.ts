@@ -3,6 +3,7 @@ import { CollisionService } from "../services/CollisionService";
 import { GraphicService } from "../services/GraphicService";
 import { TileService } from "../services/TileService";
 import { boardPointToRectPoints } from "../transformers/point";
+import { BoardPoint } from "../types/Point";
 import { Tile } from "../types/Tile";
 
 export class CellManager {
@@ -10,6 +11,7 @@ export class CellManager {
     private currentTile: Tile = undefined;
     private collisionService: CollisionService;
 
+    static readonly DEFAULT_ORIGIN: BoardPoint = { x: 4, y: 0 };
     static readonly HORIZONTAL_CELL_NUMBER = 10;
     static readonly VERTICAL_CELL_NUMBER = 20;
 

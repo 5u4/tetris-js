@@ -1,3 +1,4 @@
+import { CellManager } from "../managers/CellManager";
 import { Dot } from "../tiles/Dot";
 import { BoardPoint } from "../types/Point";
 import { Tile, TILE } from "../types/Tile";
@@ -7,7 +8,7 @@ export class TileService {
         DOT: (position: BoardPoint) => new Dot(position),
     };
 
-    static instantiate(tile: TILE, position: BoardPoint = { x: 4, y: 0 }) {
+    static instantiate(tile: TILE, position = { ...CellManager.DEFAULT_ORIGIN }) {
         return TileService.TILE_GENERATOR[tile](position);
     }
 }
