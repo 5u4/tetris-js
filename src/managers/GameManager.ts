@@ -25,6 +25,7 @@ export class GameManager {
         "ArrowLeft": () => { this.cellManager.moveLeft(); },
         "ArrowRight": () => { this.cellManager.moveRight(); },
         "ArrowDown": () => { this.cellManager.softDrop(); },
+        "ArrowUp": () => { this.cellManager.rotate(); },
         " ": () => { this.cellManager.fastDrop(); },
     };
 

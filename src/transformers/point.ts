@@ -26,6 +26,17 @@ export const addPoints = (point: Point, ...addingPoints: Point[]) => {
     return sum;
 };
 
+export const substractPoints = (point: Point, ...addingPoints: Point[]) => {
+    const sum = { ...point };
+
+    addingPoints.forEach(p => {
+        sum.x -= p.x;
+        sum.y -= p.y;
+    });
+
+    return sum;
+};
+
 export const pointToWebGLPoint = (point: Point): WebGLPoint => {
     return {
         x: transformPixelToWebGLPosition(point.x, GameManager.CANVAS_WIDTH),

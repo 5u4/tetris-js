@@ -100,6 +100,16 @@ export class CellManager {
         TileService.movement(this.currentTile).right();
     }
 
+    rotate() {
+        const rotatedPositions = TileService.rotate(this.currentTile);
+
+        if (this.collisionService.canRotateTo(rotatedPositions) === false) {
+            return;
+        }
+
+        this.currentTile.rotateTo(rotatedPositions);
+    }
+
     private canDrop() {
         if (this.currentTile === undefined) {
             return false;

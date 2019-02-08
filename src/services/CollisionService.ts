@@ -31,6 +31,16 @@ export class CollisionService {
         return this.isEmpty(addPoints(from, movement));
     }
 
+    canRotateTo(rotatedPositions: BoardPoint[]) {
+        for (const position of rotatedPositions) {
+            if (this.isEmpty(position) === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     registrate(tile: Tile) {
         tile.getPositions().forEach(position => {
             this.collider[position.x][position.y] = tile.color;

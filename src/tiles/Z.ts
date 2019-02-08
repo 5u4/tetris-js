@@ -6,6 +6,7 @@ export class Z implements Tile {
     private positions: BoardPoint[];
 
     readonly color = RED;
+    readonly originIndex = 0;
 
     constructor(origin: BoardPoint) {
         this.positions = this.buildShape(origin);
@@ -13,6 +14,14 @@ export class Z implements Tile {
 
     getPositions() {
         return this.positions;
+    }
+
+    getOrigin() {
+        return this.positions[this.originIndex];
+    }
+
+    rotateTo(finalPositions: BoardPoint[]) {
+        this.positions = finalPositions;
     }
 
     private buildShape(origin: BoardPoint) {
