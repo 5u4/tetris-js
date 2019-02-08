@@ -19,6 +19,7 @@ export class GameManager {
     private static readonly PLAYING_TEXT = "PLAYING";
     private static readonly START_TEXT = "START";
     private static readonly QUIT_KEY: string = "q";
+    private static readonly RESTART_KEY: string = "r";
 
     private readonly TILE_MOVEMENT = {
         "ArrowLeft": () => { this.cellManager.moveLeft(); },
@@ -119,6 +120,7 @@ export class GameManager {
 
         startButton.addEventListener("click", this.startHandler(startButton));
         startButton.addEventListener("keydown", this.quitHandler(startButton));
+        startButton.addEventListener("keydown", this.restartHandler());
     }
 
     /**
@@ -177,6 +179,23 @@ export class GameManager {
             startButton.textContent = GameManager.START_TEXT;
 
             this.status = "pausing";
+        };
+    }
+
+    /**
+     * Handle restart game action
+     */
+    private restartHandler() {
+        return (ev: KeyboardEvent) => {
+            if (this.status !== "playing") {
+                return;
+            }
+
+            if (ev.key !== GameManager.RESTART_KEY) {
+                return;
+            }
+
+            this.reset();
         };
     }
 
