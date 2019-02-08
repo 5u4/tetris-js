@@ -26,6 +26,10 @@ export class CellManager {
         this.currentTile = TileService.instantiate("DOT");
     }
 
+    hasCurrentTile() {
+        return this.currentTile !== undefined;
+    }
+
     drawCurrentTile() {
         if (this.currentTile === undefined) {
             return;
@@ -55,7 +59,6 @@ export class CellManager {
         }
 
         this.land();
-        this.generateTile();
     }
 
     fastDrop() {
@@ -64,7 +67,6 @@ export class CellManager {
         }
 
         this.land();
-        this.generateTile();
     }
 
     moveLeft() {

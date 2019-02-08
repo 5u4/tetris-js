@@ -40,7 +40,6 @@ export class GameManager {
         instance.boardManager.drawBoard();
 
         instance.registrateKeys();
-        instance.cellManager.generateTile(); // TODO: Remove
 
         return instance;
     }
@@ -82,7 +81,13 @@ export class GameManager {
     private renderProcess(frame: () => void) {
         this.graphicService.clear(this.gl.COLOR_BUFFER_BIT);
         window.requestAnimationFrame(frame);
-        this.cellManager.softDrop();
+
+        if (this.cellManager.hasCurrentTile() === false) {
+            this.cellManager.generateTile();
+        } else {
+            this.cellManager.softDrop();
+        }
+
         this.draw();
     }
 
