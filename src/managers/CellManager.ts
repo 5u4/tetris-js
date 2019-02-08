@@ -4,12 +4,14 @@ import { GraphicService } from "../services/GraphicService";
 import { TileService } from "../services/TileService";
 import { boardPointToRectPoints } from "../transformers/point";
 import { BoardPoint } from "../types/Point";
-import { Tile } from "../types/Tile";
+import { Shape, Tile } from "../types/Tile";
 
 export class CellManager {
     private graphicService: GraphicService;
     private currentTile: Tile = undefined;
     private collisionService: CollisionService;
+    private static readonly availableCells: Shape[] = ["O", "I", "S", "Z", "L", "J", "T"];
+    private static readonly numberOfAvailableCells = CellManager.availableCells.length;
 
     static readonly DEFAULT_ORIGIN: BoardPoint = { x: 4, y: 0 };
     static readonly HORIZONTAL_CELL_NUMBER = 10;
@@ -25,7 +27,7 @@ export class CellManager {
     }
 
     generateTile() {
-        this.currentTile = TileService.instantiate("DOT");
+        this.currentTile = TileService.instantiate(this.generateRandomCell());
     }
 
     hasCurrentTile() {
@@ -163,5 +165,9 @@ export class CellManager {
         this.collisionService.registrate(this.currentTile);
         this.collisionService.clearRows();
         this.currentTile = undefined;
+    }
+
+    private generateRandomCell() {
+        return CellManager.availableCells[Math.floor(Math.random() * CellManager.numberOfAvailableCells)];
     }
 }

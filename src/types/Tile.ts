@@ -6,4 +6,4 @@ export interface Tile {
     getPositions(): BoardPoint[];
 }
 
-export type Shape = "DOT";
+export type Shape = "DOT" | "O" | "I" | "S" | "Z" | "L" | "J" | "T";
