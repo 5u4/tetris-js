@@ -111,6 +111,10 @@ export class CellManager {
     rotate() {
         const rotatedPositions = TileService.rotate(this.currentTile);
 
+        if (rotatedPositions === undefined) {
+            return;
+        }
+
         if (this.collisionService.canRotateTo(rotatedPositions) === false) {
             return;
         }

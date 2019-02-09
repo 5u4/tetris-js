@@ -45,6 +45,10 @@ export class TileService {
     }
 
     static rotate(tile: Tile) {
+        if (tile instanceof O || tile === undefined) {
+            return undefined;
+        }
+
         const rotated: BoardPoint[] = [];
 
         const origin = tile.getOrigin();
