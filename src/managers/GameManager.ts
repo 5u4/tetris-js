@@ -18,6 +18,7 @@ export class GameManager {
     private static readonly BTN_DISABLE_CLASS_NAME = "is-disabled";
     private static readonly PLAYING_TEXT = "PLAYING";
     private static readonly START_TEXT = "START";
+    private static readonly RESTART_TEXT = "PRESS R RESTART";
     private static readonly QUIT_KEY: string = "q";
     private static readonly RESTART_KEY: string = "r";
 
@@ -101,6 +102,11 @@ export class GameManager {
         }
 
         this.draw();
+
+        if (this.cellManager.hasLost()) {
+            this.status = "pausing";
+            document.getElementById(GameManager.START_BUTTON_ID).textContent = GameManager.RESTART_TEXT;
+        }
     }
 
     /**
@@ -188,10 +194,6 @@ export class GameManager {
      */
     private restartHandler() {
         return (ev: KeyboardEvent) => {
-            if (this.status !== "playing") {
-                return;
-            }
-
             if (ev.key !== GameManager.RESTART_KEY) {
                 return;
             }

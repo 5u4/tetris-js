@@ -19,6 +19,20 @@ export class CollisionService {
         return this.collider;
     }
 
+    isBlocked(tile: Tile) {
+        if (tile === undefined) {
+            return false;
+        }
+
+        for (const position of tile.getPositions()) {
+            if (this.isEmpty(position) === false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     init() {
         this.collider = new Array<Color[]>(this.x);
 

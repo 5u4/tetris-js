@@ -30,6 +30,14 @@ export class CellManager {
         this.currentTile = TileService.instantiate(this.generateRandomCell());
     }
 
+    hasLost() {
+        if (this.collisionService.isBlocked(this.currentTile)) {
+            return true;
+        }
+
+        return false;
+    }
+
     hasCurrentTile() {
         return this.currentTile !== undefined;
     }
