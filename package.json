@@ -2,6 +2,7 @@
     "name": "tetris",
     "scripts": {
         "build": "npx webpack --mode production",
+        "jsbuild": "tsc",
         "watch": "npx webpack --mode development --watch"
     },
     "version": "1.0.0",
