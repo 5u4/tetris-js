@@ -100,14 +100,15 @@ export class GameManager {
             this.cellManager.softDrop();
         }
 
-        this.draw();
-
         if (this.cellManager.hasLost()) {
             this.status = "pausing";
             const startButton = document.getElementById(GameManager.START_BUTTON_ID);
             startButton.classList.remove(GameManager.BTN_DISABLE_CLASS_NAME);
             startButton.textContent = GameManager.START_TEXT;
+            return;
         }
+
+        this.draw();
     }
 
     /**
@@ -122,13 +123,16 @@ export class GameManager {
      * Registrate action keys on html elements
      */
     private registrateKeys() {
-        document.getElementById("body").addEventListener("keydown", this.tileMovementHandler());
+        const body = document.getElementById("body");
+
+        body.addEventListener("keydown", this.tileMovementHandler());
 
         const startButton = document.getElementById(GameManager.START_BUTTON_ID);
 
         startButton.addEventListener("click", this.startHandler(startButton));
-        startButton.addEventListener("keydown", this.quitHandler(startButton));
-        startButton.addEventListener("keydown", this.restartHandler());
+
+        body.addEventListener("keydown", this.quitHandler(startButton));
+        body.addEventListener("keydown", this.restartHandler());
     }
 
     /**
