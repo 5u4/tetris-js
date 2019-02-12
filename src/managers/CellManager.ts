@@ -27,7 +27,13 @@ export class CellManager {
     }
 
     generateTile() {
-        this.currentTile = TileService.instantiate(this.generateRandomCell());
+        const tile = TileService.instantiate(this.generateRandomCell());
+
+        for (let i = 0; i < Math.random() * 4; i++) {
+            tile.rotateTo(TileService.rotate(tile));
+        }
+
+        this.currentTile = tile;
     }
 
     hasLost() {

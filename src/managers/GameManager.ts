@@ -105,6 +105,7 @@ export class GameManager {
             const startButton = document.getElementById(GameManager.START_BUTTON_ID);
             startButton.classList.remove(GameManager.BTN_DISABLE_CLASS_NAME);
             startButton.textContent = GameManager.START_TEXT;
+            this.boardManager.drawBoard();
             return;
         }
 

@@ -45,15 +45,19 @@ export class TileService {
     }
 
     static rotate(tile: Tile) {
-        if (tile instanceof O || tile === undefined) {
+        if (tile === undefined) {
             return undefined;
+        }
+
+        if (tile instanceof O) {
+            return tile.getPositions();
         }
 
         const rotated: BoardPoint[] = [];
 
         const origin = tile.getOrigin();
 
-        tile.getPositions().forEach((position, index) => {
+        tile.getPositions().forEach(position => {
             const relativePoint = substractPoints(position, origin);
 
             const addition = TileService.TILE_ROTATION_TRAMSFORM[relativePoint.y + 2][relativePoint.x + 2];
